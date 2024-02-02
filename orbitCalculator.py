@@ -3,8 +3,8 @@ Yi = 0
 ViX = 0
 ViY = 29800
 G = 6.67*10**-11
-H = 5*10**30
-tInc = 1
+H = 2.0*10**30
+tInc = 2
 
 
 
@@ -37,7 +37,7 @@ def increment(timeIncr,G, state):
 
 import tqdm
 
-for i in tqdm.tqdm(range(80000000)):
+for i in tqdm.tqdm(range(10000000)):
     states.append(increment(tInc, G, states[-1]))
 
 Xs = []
