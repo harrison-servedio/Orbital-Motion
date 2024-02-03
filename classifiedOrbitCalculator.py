@@ -1,5 +1,6 @@
 from itertools import permutations # Used to iterate through the planets
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 # G constant defined and unchanging
 G = 6.67E-11
@@ -56,4 +57,36 @@ def plot(planets):
     plt.axis('equal')
     plt.legend()
     # plt.axis([-2e11, 2e11, -2e11, 2e11])
+    plt.show()
+
+
+
+
+
+
+
+def live(planets, steps, tincr, inter, focus=None, focusSize=0):
+    def animate(i):
+        for i in range(steps):
+            update(planets, tincr)
+        plt.cla()
+        for p in planets:
+            if p.color:
+                plt.plot(p.Xs, p.Ys, label = p.name, color=p.color)
+                plt.plot(p.Xs[-1], p.Ys[-1], "ro", markeredgecolor=p.color, markerfacecolor=p.color)
+            else:
+                plt.plot(p.Xs, p.Ys, label = p.name)
+                plt.plot(p.Xs[-1], p.Ys[-1], "ro")
+        plt.axis('equal')
+        plt.legend()
+
+        plt.legend(loc='upper left')
+        plt.tight_layout()
+        if focus:
+            plt.axis([focus.Xs[-1]-focusSize, focus.Xs[-1]+focusSize, focus.Ys[-1]-focusSize, focus.Ys[-1]+focusSize])
+
+
+    ani = FuncAnimation(plt.gcf(), animate, interval=inter)
+
+    plt.tight_layout()
     plt.show()

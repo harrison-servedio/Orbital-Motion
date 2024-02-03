@@ -1,4 +1,4 @@
-from classifiedOrbitCalculator import planet, plot, update
+from classifiedOrbitCalculator import planet, plot, update, live
 import tqdm
 
 tI = 60
@@ -9,10 +9,12 @@ mercury = planet("Mercury", 3.285e23, 69.814e9, 0, 0, 47000, "Silver")
 sun = planet("Sun", 1.989E+30, 0, 0, 0, 0, "Orange")
 
 moon = planet("Moon", 7.3476e22, 3.84317695e8+1.495978707e11, 0, 0, 29784+1023, "Grey")
-moonsMoon = planet("Moon's Moon", 0, 3.84317695e8+1.495978707e11+1e7, 0, 0, 29784+1023+350, "Purple")
+# moonsMoon = planet("Moon's Moon", 0, 3.84317695e8+1.495978707e11+1e7, 0, 0, 29784+1023+350, "Purple")
+
+# satellite = planet("Satellite")
 
 
-ps = [sun, moonsMoon, moon, earth, mercury, mars]
+ps = [sun, moon, earth, mercury, mars]
 
 
 oliver = planet("Oliver", 0, 2800, 0, 0, 100)
@@ -20,7 +22,7 @@ oliver = planet("Oliver", 0, 2800, 0, 0, 100)
 
 
 
-for i in tqdm.tqdm(range(226974)):
-    update(ps, tI)
+# for i in tqdm.tqdm(range(226974)):
+#     update(ps, tI)
 
-plot(ps)
+live(ps, 60, 1000, 500, sun, 2e11)
