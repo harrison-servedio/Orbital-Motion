@@ -24,7 +24,7 @@ AY = []
 
 states = [(Xi, Yi, AXi, AYi, ViX, ViY)]
 
-def increment(timeIncr,G, state):
+def increment(timeIncr, G, state):
     x, y, xA, yA, xVel, yVel = state
     VXOut = xVel+xA*timeIncr
     VYOut = yVel+yA*timeIncr

@@ -1,12 +1,5 @@
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-import time as t
+from itertools import permutations
 
-x = np.linspace(0, 2, 100)
-
-fig, ax = plt.subplots(figsize=(5, 2.7), layout='constrained')
-ax.plot(x, x**2, label = "testLabel")
-
-plt.show()
-
+a = [1, 2, 3, 4, 5]
+for i, j in permutations(a, 2):
+    print(i)
