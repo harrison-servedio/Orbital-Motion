@@ -57,5 +57,3 @@ def plot(planets):
     plt.legend()
     # plt.axis([-2e11, 2e11, -2e11, 2e11])
     plt.show()
-
-
