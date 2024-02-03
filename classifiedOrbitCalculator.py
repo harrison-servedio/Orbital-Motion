@@ -55,6 +55,7 @@ def plot(planets):
             ax.plot(p.Xs[-1], p.Ys[-1], "ro")
     plt.axis('equal')
     plt.legend()
+    # plt.axis([-2e11, 2e11, -2e11, 2e11])
     plt.show()
 
 
