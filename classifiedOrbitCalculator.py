@@ -1,6 +1,7 @@
 from itertools import permutations # Used to iterate through the planets
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from dateutil.relativedelta import relativedelta as rd
 
 # G constant defined and unchanging
 G = 6.67E-11
@@ -18,7 +19,7 @@ class planet:
     
     # Preps the planet class for accel computations with other planets
     def nextState(self, tincr):
-        # To adopt this function to work in three dimentions should only need to add a z, zA, and zVel. Note to self - Do you know how to name vars?
+        # To adopt this function to work in three dimensions should only need to add a z, zA, and zVel. Note to self - Do you know how to name vars?
         self.states.append(self.nState)
         x, y, xA, yA, xVel, yVel = self.states[-1]
         VXOut = xVel+xA*tincr
@@ -65,28 +66,51 @@ def plot(planets):
 
 
 
-def live(planets, steps, tincr, inter, focus=None, focusSize=0):
+def live(planets, steps, tincr, inter, focus=None, focusSize=0, tailSize=1e9):
+    global f
+    global genD
+    f = focus
+    genD = True
+    def on_press(event):
+        global f
+        global genD
+        if event.key == " ":
+            genD = not genD
+        else:
+            try:
+                key = int(event.key)
+                if key == 0:
+                    f = None
+                else:
+                    f = planets[key-1]
+            except:
+                pass
+    
+
     def animate(i):
-        for i in range(steps):
-            update(planets, tincr)
-        plt.cla()
-        for p in planets:
-            if p.color:
-                plt.plot(p.Xs, p.Ys, label = p.name, color=p.color)
-                plt.plot(p.Xs[-1], p.Ys[-1], "ro", markeredgecolor=p.color, markerfacecolor=p.color)
-            else:
-                plt.plot(p.Xs, p.Ys, label = p.name)
-                plt.plot(p.Xs[-1], p.Ys[-1], "ro")
-        plt.axis('equal')
-        plt.legend()
+        global f
+        global genD
+        if genD:
+            for i in range(steps):
+                update(planets, tincr)
+            plt.cla()
+            for i, p in enumerate(planets):
+                if p.color:
+                    plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1), color=p.color)
+                    plt.plot(p.Xs[-1], p.Ys[-1], "ro", markeredgecolor=p.color, markerfacecolor=p.color)
+                else:
+                    plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1))
+                    plt.plot(p.Xs[-1], p.Ys[-1], "ro")
+            plt.axis('equal')
+            plt.legend()
+            if f:
+                plt.axis([f.Xs[-1]-focusSize, f.Xs[-1]+focusSize, f.Ys[-1]-focusSize, f.Ys[-1]+focusSize])
+            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds'
+            
+            plt.title(fmt.format(rd(seconds=tincr*len(p.Xs))))
 
-        plt.legend(loc='upper left')
-        plt.tight_layout()
-        if focus:
-            plt.axis([focus.Xs[-1]-focusSize, focus.Xs[-1]+focusSize, focus.Ys[-1]-focusSize, focus.Ys[-1]+focusSize])
-
-
+    fig, ax = plt.subplots()
     ani = FuncAnimation(plt.gcf(), animate, interval=inter)
-
+    fig.canvas.mpl_connect('key_press_event', on_press)
     plt.tight_layout()
     plt.show()
