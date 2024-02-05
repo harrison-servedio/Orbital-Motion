@@ -61,9 +61,6 @@ def plot(planets):
 
 
 
-
-
-
 def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
     global f
     global genD
@@ -120,7 +117,6 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
             ##############################################################
 
     fig, ax = plt.subplots()
-    ani = FuncAnimation(plt.gcf(), animate, interval=inter)
+    ani = FuncAnimation(plt.gcf(), animate, interval=inter, cache_frame_data=False)
     fig.canvas.mpl_connect('key_press_event', on_press)
-    plt.tight_layout()
     plt.show()
