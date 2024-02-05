@@ -10,7 +10,6 @@ class planet:
     def __init__(self, name, mass, x, y, VX, VY, color=""):
         self.name = name
         self.mass = mass
-        self.states = []
         # Keeps track of the history of Xs and Ys for graphing purposes
         self.Xs = [x]
         self.Ys = [y]
@@ -20,8 +19,7 @@ class planet:
     # Preps the planet class for accel computations with other planets
     def nextState(self, tincr):
         # To adopt this function to work in three dimensions should only need to add a z, zA, and zVel. Note to self - Do you know how to name vars?
-        self.states.append(self.nState)
-        x, y, xA, yA, xVel, yVel = self.states[-1]
+        x, y, xA, yA, xVel, yVel = self.nState
         VXOut = xVel+xA*tincr
         VYOut = yVel+yA*tincr
         xPosOut = x+VXOut*tincr
@@ -66,16 +64,23 @@ def plot(planets):
 
 
 
-def live(planets, steps, tincr, inter, focus=None, focusSize=0, tailSize=1e9):
+def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
     global f
     global genD
+    global s
+    s = focusSize
     f = focus
     genD = True
     def on_press(event):
         global f
         global genD
+        global s
         if event.key == " ":
             genD = not genD
+        elif event.key == "=":
+            s = s * 0.8
+        elif event.key == "-":
+            s = s * 1.2
         else:
             try:
                 key = int(event.key)
@@ -90,6 +95,7 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=0, tailSize=1e9):
     def animate(i):
         global f
         global genD
+        global s
         if genD:
             for i in range(steps):
                 update(planets, tincr)
@@ -104,10 +110,14 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=0, tailSize=1e9):
             plt.axis('equal')
             plt.legend()
             if f:
-                plt.axis([f.Xs[-1]-focusSize, f.Xs[-1]+focusSize, f.Ys[-1]-focusSize, f.Ys[-1]+focusSize])
-            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds'
+                plt.axis([f.Xs[-1]-s, f.Xs[-1]+s, f.Ys[-1]-s, f.Ys[-1]+s])
+            
+            # taken from online - cite before submitting
+            ###############################################################
+            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
             
             plt.title(fmt.format(rd(seconds=tincr*len(p.Xs))))
+            ##############################################################
 
     fig, ax = plt.subplots()
     ani = FuncAnimation(plt.gcf(), animate, interval=inter)

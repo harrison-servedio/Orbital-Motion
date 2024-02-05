@@ -1,3 +1,3 @@
-a = "h"
+import string
+import string.snake
 
-if a: print("Ere")
