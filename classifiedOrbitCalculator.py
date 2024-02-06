@@ -1,7 +1,12 @@
 from itertools import permutations # Used to iterate through the planets
+
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+
 from dateutil.relativedelta import relativedelta as rd
+
+from tqdm import tqdm
+
 
 # G constant defined and unchanging
 G = 6.67E-11
@@ -44,7 +49,10 @@ def update(planets, timeIncr):
         p.nextState(timeIncr)
 
 
-def plot(planets):
+def plot(planets, timeIncr, steps):
+    for _ in tqdm(range(steps)):
+        update(planets, timeIncr)
+
     fig, ax = plt.subplots(figsize=(5, 5), layout='constrained')
     for p in planets:
         if p.color:
@@ -53,12 +61,11 @@ def plot(planets):
         else:
             ax.plot(p.Xs, p.Ys, label = p.name)
             ax.plot(p.Xs[-1], p.Ys[-1], "ro")
+    
     plt.axis('equal')
     plt.legend()
     # plt.axis([-2e11, 2e11, -2e11, 2e11])
     plt.show()
-
-
 
 
 def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
@@ -109,7 +116,7 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
             if f:
                 plt.axis([f.Xs[-1]-s, f.Xs[-1]+s, f.Ys[-1]-s, f.Ys[-1]+s])
             
-            # taken from online - cite before submitting
+            # taken from gpt - cite before submitting
             ###############################################################
             fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
             
@@ -117,6 +124,9 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
             ##############################################################
 
     fig, ax = plt.subplots()
+    
     ani = FuncAnimation(plt.gcf(), animate, interval=inter, cache_frame_data=False)
     fig.canvas.mpl_connect('key_press_event', on_press)
+
+    plt.axis('equal')
     plt.show()
