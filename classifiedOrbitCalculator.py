@@ -112,11 +112,10 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
                     plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1))
                     plt.plot(p.Xs[-1], p.Ys[-1], "ro")
             plt.axis('equal')
-            plt.legend()
             if f:
                 plt.axis([f.Xs[-1]-s, f.Xs[-1]+s, f.Ys[-1]-s, f.Ys[-1]+s])
-            
-            # taken from gpt - cite before submitting
+            plt.legend()
+            # taken from gpt and then edited from stack overflow - cite before submitting
             ###############################################################
             fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
             
@@ -124,7 +123,7 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
             ##############################################################
 
     fig, ax = plt.subplots()
-    
+
     ani = FuncAnimation(plt.gcf(), animate, interval=inter, cache_frame_data=False)
     fig.canvas.mpl_connect('key_press_event', on_press)
 
