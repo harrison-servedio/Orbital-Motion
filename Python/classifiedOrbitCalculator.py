@@ -1,8 +1,10 @@
 from itertools import permutations # Used to iterate through the planets
 
+
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+# Used in formatting time
 from dateutil.relativedelta import relativedelta as rd
 
 from tqdm import tqdm
@@ -11,8 +13,12 @@ from tqdm import tqdm
 # G constant defined and unchanging
 G = 6.67E-11
 
+# Planet Class
+#   Tracks location of the planets and their velos+accels
+#   Updates the planet with the gravity from other planets
 class planet:
     def __init__(self, name, mass, x, y, VX, VY, color=""):
+        # Used for legend
         self.name = name
         self.mass = mass
         # Keeps track of the history of Xs and Ys for graphing purposes
@@ -57,13 +63,13 @@ def plot(planets, timeIncr, steps):
     for p in planets:
         if p.color:
             ax.plot(p.Xs, p.Ys, label = p.name, color=p.color)
-            ax.plot(p.Xs[-1], p.Ys[-1], "ro", markeredgecolor=p.color, markerfacecolor=p.color)
+            ax.plot(p.Xs[-1], p.Ys[-1], "o", markeredgecolor=p.color, markerfacecolor=p.color)
         else:
             ax.plot(p.Xs, p.Ys, label = p.name)
-            ax.plot(p.Xs[-1], p.Ys[-1], "ro")
+            ax.plot(p.Xs[-1], p.Ys[-1], "o")
     
     plt.axis('equal')
-    plt.legend()
+    plt.legend(loc='upper right')
     # plt.axis([-2e11, 2e11, -2e11, 2e11])
     plt.show()
 
@@ -107,14 +113,14 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
             for i, p in enumerate(planets):
                 if p.color:
                     plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1), color=p.color)
-                    plt.plot(p.Xs[-1], p.Ys[-1], "ro", markeredgecolor=p.color, markerfacecolor=p.color)
+                    plt.plot(p.Xs[-1], p.Ys[-1], "o", markeredgecolor=p.color, markerfacecolor=p.color)
                 else:
                     plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1))
-                    plt.plot(p.Xs[-1], p.Ys[-1], "ro")
+                    plt.plot(p.Xs[-1], p.Ys[-1], "o")
             plt.axis('equal')
             if f:
                 plt.axis([f.Xs[-1]-s, f.Xs[-1]+s, f.Ys[-1]-s, f.Ys[-1]+s])
-            plt.legend()
+            plt.legend(loc='upper right')
             # taken from gpt and then edited from stack overflow - cite before submitting
             ###############################################################
             fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
