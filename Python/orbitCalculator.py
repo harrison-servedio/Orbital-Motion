@@ -36,29 +36,31 @@ def increment(timeIncr, G, state):
     
     return (xPosOut, yPosOut, AXOut, AYOut, VXOut, VYOut)
 
-import tqdm
+# import tqdm
 
-for i in tqdm.tqdm(range(1526974)):
-    states.append(increment(tInc, G, states[-1]))
+# for i in tqdm.tqdm(range(1526974)):
+#     states.append(increment(tInc, G, states[-1]))
 
-Xs = []
-Ys = []
+# Xs = []
+# Ys = []
 
-for i in tqdm.tqdm(states):
-    Xs.append(i[0])
-    Ys.append(i[1])
+# for i in tqdm.tqdm(states):
+#     Xs.append(i[0])
+#     Ys.append(i[1])
 
 
 
-import matplotlib
-import matplotlib.pyplot as plt
+# import matplotlib
+# import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(figsize=(5, 5), layout='constrained')
-ax.plot(Xs, Ys, label = "testLabel")
-ax.plot(0, 0, "ro", markerfacecolor="orange")
-ax.plot(Xs[-1], Ys[-1], "ro", markeredgecolor="green", markerfacecolor="green")
+# fig, ax = plt.subplots(figsize=(5, 5), layout='constrained')
+# ax.plot(Xs, Ys, label = "testLabel")
+# ax.plot(0, 0, "ro", markerfacecolor="orange")
+# ax.plot(Xs[-1], Ys[-1], "ro", markeredgecolor="green", markerfacecolor="green")
 
-print(states[-1])
+# print(states[-1])
 
-plt.axis('equal')
-plt.show()
+# plt.axis('equal')
+# plt.show()
+
+print(increment(tInc, G, states[-1]))
