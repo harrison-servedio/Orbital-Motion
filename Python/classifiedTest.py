@@ -1,7 +1,7 @@
 from classifiedOrbitCalculator import planet, plot, live
 
 
-horizontalSpeed = 4e4
+horizontalSpeed = 0
 
 ps = [
     planet("Moon", 7.3476e22, 3.84317695e8+1.495978707e11, 0, horizontalSpeed, 29784+1023, "Grey"),
