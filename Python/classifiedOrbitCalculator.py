@@ -62,7 +62,8 @@ def update(planets, timeIncr):
 
 # Plots the position of the planets after a certain number of steps
 # Takes a list of planet classes, the time increment between calculation steps, and the number of steps to simulate
-def plot(planets, timeIncr, steps):
+# print info prints major and minor axis information for the planet number specified
+def plot(planets, timeIncr, steps, printInfo = False, planetNum = 0):
     # Uses a tqdm loading bar and simulates the number of steps specified by repeatedly running the update function
     for _ in tqdm(range(steps)):
         update(planets, timeIncr)
@@ -86,6 +87,9 @@ def plot(planets, timeIncr, steps):
     plt.axis('equal')
     # creates a legend and displays the created graph
     plt.legend(loc='upper right')
+    if printInfo:
+        print(f"X min: {str(min(planets[planetNum].Xs))}\nX max: {str(max(planets[planetNum].Xs))}")
+        print(f"Y min: {str(min(planets[planetNum].Ys))}\nY max: {str(max(planets[planetNum].Ys))}")
     plt.show()
 
 
@@ -97,23 +101,31 @@ def plot(planets, timeIncr, steps):
 #   focus - the planet the animation focuses on
 #   focusSize - the size of the window of the animation to be displayed
 #   tailSize - The amount of points of the tail to display
+# The poor use of global variables and of functions inside functions was needed because of the way matplotlib function animate works
 def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
+    # f: Planet focused on
+    # genD: Generate data, basically pauses the simulation if no data is being generated
+    # s: size of focus window for animation
     global f
     global genD
     global s
     s = focusSize
     f = focus
     genD = True
+    # On press is triggered when there is user input
     def on_press(event):
         global f
         global genD
         global s
+        # The space key pauses and unpauses the simulation
         if event.key == " ":
             genD = not genD
+        # The equals key zooms in by decreasing the focus and the minus key zooms out by increasing the focus
         elif event.key == "=":
             s = s * 0.8
         elif event.key == "-":
             s = s * 1.2
+        # check if the key pressed was a number and if it is set the focus to be the planet that correlates with that number
         else:
             try:
                 key = int(event.key)
@@ -129,9 +141,12 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
         global f
         global genD
         global s
+        # If simulation is not paused then animate otherwise the simulation doesn't change
         if genD:
+            # Generates more data
             for i in range(steps):
                 update(planets, tincr)
+            # Clears the plot and completely replots the data
             plt.cla()
             for i, p in enumerate(planets):
                 if p.color:
@@ -141,20 +156,23 @@ def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9)
                     plt.plot(p.Xs[int(-tailSize):], p.Ys[int(-tailSize):], label = p.name + " - " + str(i+1))
                     plt.plot(p.Xs[-1], p.Ys[-1], "o")
             plt.axis('equal')
+            # If there is a focus then the graph is focused on that point
             if f:
                 plt.axis([f.Xs[-1]-s, f.Xs[-1]+s, f.Ys[-1]-s, f.Ys[-1]+s])
-            plt.legend(loc='upper right')
-            # taken from gpt and then edited from stack overflow - cite before submitting
-            ###############################################################
-            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
             
+            # sets the legend to the top right because having the legend be automatic slows down the simulation
+            plt.legend(loc='upper right')
+            
+            # Next two lines were found online - they format the time in day hour minute second format
+            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds elapsed - focus size: ' + "{:e} - focused on: ".format(s) + (f.name if f else "None")
             plt.title(fmt.format(rd(seconds=tincr*len(p.Xs))))
-            ##############################################################
 
+    # Creates the plot
     fig, ax = plt.subplots()
 
+    # Creates the animation object and sets up keypress events
     ani = FuncAnimation(plt.gcf(), animate, interval=inter, cache_frame_data=False)
     fig.canvas.mpl_connect('key_press_event', on_press)
 
-    plt.axis('equal')
+    # Begins the animation
     plt.show()
