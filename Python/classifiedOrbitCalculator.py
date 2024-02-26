@@ -1,6 +1,7 @@
-from itertools import permutations # Used to iterate through the planets
+# Used to iterate through the planets
+from itertools import permutations 
 
-
+# Used to graph and animate the data
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
