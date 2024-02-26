@@ -7,6 +7,7 @@ from matplotlib.animation import FuncAnimation
 # Used in formatting time
 from dateutil.relativedelta import relativedelta as rd
 
+# Used to create loading bar
 from tqdm import tqdm
 
 
@@ -29,16 +30,19 @@ class planet:
     
     # Preps the planet class for accel computations with other planets
     def nextState(self, tincr):
-        # To adopt this function to work in three dimensions should only need to add a z, zA, and zVel. Note to self - Do you know how to name vars?
+        # This calculates the future position of the planet after its acceleration has been calculated with the other planets
         x, y, xA, yA, xVel, yVel = self.nState
         VXOut = xVel+xA*tincr
         VYOut = yVel+yA*tincr
         xPosOut = x+VXOut*tincr
         yPosOut = y+VYOut*tincr
         self.nState = [xPosOut, yPosOut, 0, 0, VXOut, VYOut]
+        # Saves the position of the planet in order to create a trail
         self.Xs.append(xPosOut)
         self.Ys.append(yPosOut)
 
+    # Update calculates the acceleration between self and another planet 
+    # Keeps track of the cumulative sum of the force from all other planets before running the update function
     def updateA(self, p):
         x, y, xA, yA, a, b = self.nState
         pX, pY, _, _, _, _ = p.nState
@@ -48,32 +52,51 @@ class planet:
         self.nState = [x, y, xA+AXOut, yA+AYOut, a, b]
 
 # Updates planet locs over timeIncr
+# Uses permulatations to run the update function for every planet with every other planet
 def update(planets, timeIncr):
     for p, h in permutations(planets, 2):
         p.updateA(h)
+    # After updating the accelerations of the planets, it runs update to compute the positions of the planets with the calculated
     for p in planets:
         p.nextState(timeIncr)
 
-
+# Plots the position of the planets after a certain number of steps
+# Takes a list of planet classes, the time increment between calculation steps, and the number of steps to simulate
 def plot(planets, timeIncr, steps):
+    # Uses a tqdm loading bar and simulates the number of steps specified by repeatedly running the update function
     for _ in tqdm(range(steps)):
         update(planets, timeIncr)
 
+    # Creates the figure
     fig, ax = plt.subplots(figsize=(5, 5), layout='constrained')
+    # For each planet, plots it with its color if it has a color specified
     for p in planets:
         if p.color:
+            # plots trail
             ax.plot(p.Xs, p.Ys, label = p.name, color=p.color)
+            # Plots a point at end of trail
             ax.plot(p.Xs[-1], p.Ys[-1], "o", markeredgecolor=p.color, markerfacecolor=p.color)
         else:
+            # plots trail
             ax.plot(p.Xs, p.Ys, label = p.name)
+            # Plots a point at end of trail
             ax.plot(p.Xs[-1], p.Ys[-1], "o")
     
+    # Sets the axis equal so the scale is the same for x and y
     plt.axis('equal')
+    # creates a legend and displays the created graph
     plt.legend(loc='upper right')
-    # plt.axis([-2e11, 2e11, -2e11, 2e11])
     plt.show()
 
 
+# Lives takes various arguments in order to display a live simulation of the planets
+#   planets - A list of instances of the planet class
+#   steps - the steps between each frame
+#   tincr - the time that each time step simulates in seconds
+#   inter - the minimum time between frame(There might be more time between frame if the computer is too slow)
+#   focus - the planet the animation focuses on
+#   focusSize - the size of the window of the animation to be displayed
+#   tailSize - The amount of points of the tail to display
 def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
     global f
     global genD
