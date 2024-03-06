@@ -16,7 +16,7 @@ from tqdm import tqdm
 G = 6.67E-11
 
 # Planet Class
-#   Tracks location of the planets and their velos+accels
+#   Tracks location of a planet and its velo+accel
 #   Updates the planet with the gravity from other planets
 class planet:
     def __init__(self, name, mass, x, y, VX, VY, color=""):
