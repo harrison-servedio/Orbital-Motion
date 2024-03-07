@@ -33,11 +33,14 @@ class planet:
     def nextState(self, tincr):
         # This calculates the future position of the planet after its acceleration has been calculated with the other planets
         x, y, xA, yA, xVel, yVel = self.nState
+
         VXOut = xVel+xA*tincr
         VYOut = yVel+yA*tincr
         xPosOut = x+VXOut*tincr
         yPosOut = y+VYOut*tincr
+
         self.nState = [xPosOut, yPosOut, 0, 0, VXOut, VYOut]
+
         # Saves the position of the planet in order to create a trail
         self.Xs.append(xPosOut)
         self.Ys.append(yPosOut)
@@ -46,14 +49,16 @@ class planet:
     # Keeps track of the cumulative sum of the force from all other planets before running the update function
     def updateA(self, p):
         x, y, xA, yA, a, b = self.nState
-        pX, pY, _, _, _, _ = p.nState
+        pX, pY = p.nState[:2]
+
+
         dist = (x-pX)**2 + (y-pY)**2
         AXOut = -(G*(x-pX)*p.mass)/dist**1.5
         AYOut = -(G*(y-pY)*p.mass)/dist**1.5
         self.nState = [x, y, xA+AXOut, yA+AYOut, a, b]
 
 # Updates planet locs over timeIncr
-# Uses permulatations to run the update function for every planet with every other planet
+# Uses permutations to run the update function for every planet with every other planet
 def update(planets, timeIncr):
     for p, h in permutations(planets, 2):
         p.updateA(h)
