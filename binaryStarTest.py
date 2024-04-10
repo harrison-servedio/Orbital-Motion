@@ -1,4 +1,4 @@
-from classifiedOrbitCalculator import planet, plot, live
+from multiPlanetOrbitCalculator import planet, plot, live
 
 # With lots of testing, binary star system works a little
 # The suns are still moving very fast and they are very close to each other

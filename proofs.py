@@ -1,4 +1,4 @@
-from classifiedOrbitCalculator import planet, plot, live
+from multiPlanetOrbitCalculator import planet, plot, live
 
 
 # Simulation used to prove Kepler's 1st law

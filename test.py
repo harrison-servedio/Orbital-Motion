@@ -1,4 +1,4 @@
-from classifiedOrbitCalculator import planet, plot, live
+from multiPlanetOrbitCalculator import planet, plot, live
 
 
 horizontalSpeed = 0

@@ -1,3 +1,5 @@
+# This file is an initial test of a single planet system
+# The code only simulates gravity for the orbiting body and does not calculate the orbiting bodies affect on the host
 Xi = 149597870700
 Yi = 0
 ViX = 0
