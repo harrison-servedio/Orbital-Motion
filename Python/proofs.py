@@ -14,7 +14,7 @@ ps = [
     planet("Planet 1", 0, 784400000, 0, 0, 291661.2308568036, "Green"),
     planet("Host", 1E+30, 0, 0, 0, 0, "Orange"),
 ]
-# plot(ps, 1, 16912, printInfo=True)
+plot(ps, 1, 16912, printInfo=True)
 
 # Simulation 2 to prove Kepler's 3rd law
 ps = [
@@ -31,4 +31,5 @@ ps = [
 ]
 
 orbits= 90
-plot(ps, 1, 8207*orbits, printInfo=True)
+# plot(ps, 1, 8207*orbits, printInfo=True)
+live(ps, 100, 0.5, 100, None)

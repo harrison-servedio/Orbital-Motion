@@ -14,5 +14,5 @@ ps = [
 
 
 
-live(planets=ps, steps=1000, tincr=60, inter=1 , focus=ps[-1], focusSize=2e11)
+live(planets=ps, steps=1000, tincr=600, inter=1 , focus=ps[-1], focusSize=2e11)
 # plot(ps, 100, 50000)
