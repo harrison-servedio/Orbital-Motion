@@ -111,7 +111,7 @@ def plot(planets, timeIncr, steps, printInfo = False, planetNum = 0):
 def live(planets, steps, tincr, inter, focus=None, focusSize=2e11, tailSize=1e9):
     # f: Planet focused on
     # genD: Generate data, basically pauses the simulation if no data is being generated
-    # s: size of focus window for animation
+    # s: size of focus window for animation 
     global f
     global genD
     global s
